@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
+import Navbar from "./_components/navbar";
+import { cn } from "@/lib/utils";
 
-const nunito = Nunito({ subsets: ["latin"] });
+const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito" });
 
 export const metadata: Metadata = {
 	title: "Airbnb",
@@ -16,7 +18,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={nunito.className}>{children}</body>
+			<body className={cn("font-nunito antialiased", nunito.variable)}>
+				<Navbar />
+				{children}
+			</body>
 		</html>
 	);
 }
