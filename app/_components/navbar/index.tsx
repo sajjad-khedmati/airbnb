@@ -1,5 +1,5 @@
 import Container from "@/components/container";
-import Logo from "./logo";
+import Logo from "../../../components/logo";
 import Search from "./search";
 import UserButton from "./user-button";
 

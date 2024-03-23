@@ -13,13 +13,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
 	children,
+	auth,
 }: Readonly<{
 	children: React.ReactNode;
+	auth: React.ReactNode;
 }>) {
 	return (
 		<html lang="en">
 			<body className={cn("font-nunito antialiased", nunito.variable)}>
 				<Navbar />
+				{auth}
 				{children}
 			</body>
 		</html>

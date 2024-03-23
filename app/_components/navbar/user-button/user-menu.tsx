@@ -1,3 +1,4 @@
+"use client";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -9,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import UserAvatar from "./user-avatar";
 import { KeyRound, UserPlus } from "lucide-react";
+import Link from "next/link";
 
 export default function UserMenu() {
 	return (
@@ -20,15 +22,18 @@ export default function UserMenu() {
 				<DropdownMenuLabel>My Account</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem className={"cursor-pointer"}>
-						<KeyRound className="w-4 h-4 mr-2" />
-						<span className="text-sm">Login</span>
-					</DropdownMenuItem>
-
-					<DropdownMenuItem className={"cursor-pointer"}>
-						<UserPlus className="w-4 h-4 mr-2" />
-						<span className="text-sm">Register</span>
-					</DropdownMenuItem>
+					<Link href={"/login"}>
+						<DropdownMenuItem className={"cursor-pointer"}>
+							<KeyRound className="w-4 h-4 mr-2" />
+							<span className="text-sm">Login</span>
+						</DropdownMenuItem>
+					</Link>
+					<Link href={"/register"}>
+						<DropdownMenuItem className={"cursor-pointer"}>
+							<UserPlus className="w-4 h-4 mr-2" />
+							<span className="text-sm">Register</span>
+						</DropdownMenuItem>
+					</Link>
 				</DropdownMenuGroup>
 			</DropdownMenuContent>
 		</DropdownMenu>
