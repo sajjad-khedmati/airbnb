@@ -2,16 +2,18 @@ import Container from "@/components/container";
 import Logo from "../../../components/logo";
 import Search from "./search";
 import UserButton from "./user-button";
+import Categories from "../categories";
 
 const Navbar = () => {
 	return (
-		<header className="sticky top-0 left-0 w-screen shadow-sm py-4 border-b-[1px]">
+		<header className="sticky top-0 left-0 w-screen ">
 			<Container>
-				<nav className="w-full flex flex-row gap-3 md:gap-0 items-center justify-between">
+				<nav className="w-full flex flex-row gap-3 py-4 shadow-sm border-b-[1px] md:gap-0 items-center justify-between">
 					<Logo />
 					<Search />
 					<UserButton />
 				</nav>
+				<Categories />
 			</Container>
 		</header>
 	);
