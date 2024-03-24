@@ -88,7 +88,7 @@ export default function LoginForm() {
 				</div>
 
 				<div className="flex gap-2 flex-wrap">
-					<GoogleButton disabled />
+					<GoogleButton />
 					<GithubButton />
 				</div>
 
