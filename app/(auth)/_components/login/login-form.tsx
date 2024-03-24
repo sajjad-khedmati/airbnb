@@ -16,31 +16,51 @@ import { Button } from "@/components/ui/button";
 import GoogleButton from "../google-button";
 import GithubButton from "../github-button";
 import { Input } from "@/components/ui/input";
+import { signIn } from "@/auth";
+import { login } from "@/actions/auth";
+import { toast } from "sonner";
+import { useTransition } from "react";
 
 export default function LoginForm() {
 	const form = useForm<z.infer<typeof loginSchema>>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
-			username: "",
+			email: "",
 			password: "",
 		},
 	});
+	const [isPending, startTransition] = useTransition();
 
 	const onSubmit = async (values: z.infer<typeof loginSchema>) => {
-		console.log(values);
+		startTransition(() => {
+			login(values)
+				.then((res) => {
+					if (res?.error) {
+						toast("please try again", {
+							description: res.error,
+							className: "bg-rose-500 text-white",
+						});
+					}
+				})
+				.catch((err) => {
+					toast("please try again", {
+						className: "bg-rose-500 text-white",
+					});
+				});
+		});
 	};
 
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
 				<FormField
-					name="username"
+					name="email"
 					control={form.control}
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Username</FormLabel>
+							<FormLabel>Email</FormLabel>
 							<FormControl>
-								<Input placeholder="sajika" {...field} />
+								<Input placeholder="example@gmail.com" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -72,7 +92,7 @@ export default function LoginForm() {
 					<GithubButton disabled />
 				</div>
 
-				<Button type="submit" className="w-full">
+				<Button disabled={isPending} type="submit" className="w-full">
 					Login
 				</Button>
 			</form>

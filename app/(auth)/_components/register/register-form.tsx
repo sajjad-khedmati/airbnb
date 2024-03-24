@@ -1,3 +1,4 @@
+"use client";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -13,9 +14,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import GoogleButton from "../google-button";
 import GithubButton from "../github-button";
+import { register } from "@/actions/auth";
+import { toast } from "sonner";
+import { PartyPopper, TriangleAlert } from "lucide-react";
 
 export default function RegisterForm() {
 	const form = useForm<z.infer<typeof registerSchema>>({
@@ -29,7 +32,22 @@ export default function RegisterForm() {
 	});
 
 	const onSubmit = async (values: z.infer<typeof registerSchema>) => {
-		console.log(values);
+		try {
+			const result = await register(
+				values.email,
+				values.username,
+				values.password,
+			);
+			result &&
+				toast("Welcome to out community!", {
+					description: `user ${result.name} successfully created`,
+					icon: <PartyPopper className="mr-2" />,
+				});
+		} catch (error) {
+			toast("an Error accurded when try to register ", {
+				icon: <TriangleAlert className="mr-2" />,
+			});
+		}
 	};
 
 	return (
@@ -102,7 +120,11 @@ export default function RegisterForm() {
 					<GithubButton disabled />
 				</div>
 
-				<Button type="submit" className="w-full">
+				<Button
+					disabled={form.formState.isSubmitting}
+					type="submit"
+					className="w-full"
+				>
 					Create an account
 				</Button>
 			</form>

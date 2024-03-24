@@ -1,5 +1,6 @@
-import Link from "next/link";
+import { auth } from "@/auth";
 
-export default function Home() {
-	return <main className=""></main>;
+export default async function Home() {
+	const session = await auth();
+	return <main className="">session : {JSON.stringify(session)}</main>;
 }

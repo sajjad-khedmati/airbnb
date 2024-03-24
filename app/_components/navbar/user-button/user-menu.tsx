@@ -9,32 +9,53 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import UserAvatar from "./user-avatar";
-import { KeyRound, UserPlus } from "lucide-react";
+import { KeyRound, LogOut, User, UserPlus } from "lucide-react";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
 
 export default function UserMenu() {
+	const session = useSession();
+
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger>
+			<DropdownMenuTrigger className="focus-visible:ring-0">
 				<UserAvatar />
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className="w-[200px] pb-2">
-				<DropdownMenuLabel>My Account</DropdownMenuLabel>
+			<DropdownMenuContent className="w-[200px]">
+				{session.status === "authenticated" ? (
+					<DropdownMenuLabel className="flex items-center text-xs gap-1 truncate">
+						<User className="w-4 h-4" />
+						{session.data.user?.email}
+					</DropdownMenuLabel>
+				) : (
+					<DropdownMenuLabel>Accounting</DropdownMenuLabel>
+				)}
 				<DropdownMenuSeparator />
-				<DropdownMenuGroup>
-					<Link href={"/login"}>
-						<DropdownMenuItem className={"cursor-pointer"}>
-							<KeyRound className="w-4 h-4 mr-2" />
-							<span className="text-sm">Login</span>
+				{session.status === "unauthenticated" && (
+					<DropdownMenuGroup>
+						<Link href={"/login"}>
+							<DropdownMenuItem className={"cursor-pointer"}>
+								<KeyRound className="w-4 h-4 mr-2" />
+								<span className="text-sm">Login</span>
+							</DropdownMenuItem>
+						</Link>
+						<Link href={"/register"}>
+							<DropdownMenuItem className={"cursor-pointer"}>
+								<UserPlus className="w-4 h-4 mr-2" />
+								<span className="text-sm">Register</span>
+							</DropdownMenuItem>
+						</Link>
+					</DropdownMenuGroup>
+				)}
+
+				{session.status === "authenticated" && (
+					<DropdownMenuGroup>
+						<DropdownMenuItem className="cursor-pointer">
+							<LogOut className="w-4 h-4 mr-2" />
+							<button onClick={() => signOut()}>Sign out</button>
 						</DropdownMenuItem>
-					</Link>
-					<Link href={"/register"}>
-						<DropdownMenuItem className={"cursor-pointer"}>
-							<UserPlus className="w-4 h-4 mr-2" />
-							<span className="text-sm">Register</span>
-						</DropdownMenuItem>
-					</Link>
-				</DropdownMenuGroup>
+					</DropdownMenuGroup>
+				)}
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);
