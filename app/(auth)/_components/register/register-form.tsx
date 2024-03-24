@@ -33,11 +33,7 @@ export default function RegisterForm() {
 
 	const onSubmit = async (values: z.infer<typeof registerSchema>) => {
 		try {
-			const result = await register(
-				values.email,
-				values.username,
-				values.password,
-			);
+			const result = await register(values);
 			result &&
 				toast("Welcome to out community!", {
 					description: `user ${result.name} successfully created`,
@@ -117,7 +113,7 @@ export default function RegisterForm() {
 
 				<div className="flex gap-2 flex-wrap">
 					<GoogleButton disabled />
-					<GithubButton disabled />
+					<GithubButton />
 				</div>
 
 				<Button

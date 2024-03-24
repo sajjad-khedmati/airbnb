@@ -89,7 +89,7 @@ export default function LoginForm() {
 
 				<div className="flex gap-2 flex-wrap">
 					<GoogleButton disabled />
-					<GithubButton disabled />
+					<GithubButton />
 				</div>
 
 				<Button disabled={isPending} type="submit" className="w-full">

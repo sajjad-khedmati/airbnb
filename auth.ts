@@ -17,6 +17,7 @@ export const {
 	},
 	pages: {
 		signIn: "/",
+		error: "auth-error",
 	},
 	debug: process.env.NODE_ENV === "development",
 	secret: process.env.NEXTAUTH_SECRET,
