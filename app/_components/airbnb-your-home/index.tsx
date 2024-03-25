@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import Category from "./form-steps/category";
 import { FieldValues, useForm } from "react-hook-form";
+import Location from "./form-steps/location";
 
 enum STEPS {
 	CATEGORY = 0,
@@ -72,6 +73,7 @@ export default function AirbnbYourHome() {
 	});
 
 	const category = watch("category");
+	const location = watch("location");
 
 	// apply changes for setValue methods - customize it!
 	const customSetValue = (id: string, value: any) => {
@@ -100,6 +102,13 @@ export default function AirbnbYourHome() {
 					<Category
 						category={category}
 						onClick={(category) => customSetValue("category", category)}
+					/>
+				)}
+
+				{step === STEPS.LOCATION && (
+					<Location
+						location={location}
+						onChange={(value) => customSetValue("location", value)}
 					/>
 				)}
 
