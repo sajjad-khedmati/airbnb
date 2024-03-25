@@ -19,6 +19,7 @@ import GithubButton from "../github-button";
 import { register } from "@/actions/auth";
 import { toast } from "sonner";
 import { PartyPopper, TriangleAlert } from "lucide-react";
+import Link from "next/link";
 
 export default function RegisterForm() {
 	const form = useForm<z.infer<typeof registerSchema>>({
@@ -123,6 +124,17 @@ export default function RegisterForm() {
 				>
 					Create an account
 				</Button>
+				<div className="flex items-center gap-2">
+					<p className="text-muted-foreground text-sm">
+						Already have an account?
+					</p>
+					<Link
+						href={"/login"}
+						className="text-rose-500 text-sm font-semibold hover:underline underline-offset-4 transition"
+					>
+						Login to airbnb
+					</Link>
+				</div>
 			</form>
 		</Form>
 	);

@@ -10,8 +10,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import UserAvatar from "./user-avatar";
 import { KeyRound, LogOut, User, UserPlus } from "lucide-react";
+import { TbHomeDollar } from "react-icons/tb";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import { userMenu } from "@/constants/user-menu";
 
 export default function UserMenu() {
 	const session = useSession();
@@ -23,10 +25,34 @@ export default function UserMenu() {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-[200px]">
 				{session.status === "authenticated" ? (
-					<DropdownMenuLabel className="flex items-center text-xs gap-1 truncate">
-						<User className="w-4 h-4" />
-						{session.data.user?.email}
-					</DropdownMenuLabel>
+					<>
+						<DropdownMenuLabel className="flex items-center text-xs gap-1 truncate">
+							<User className="w-4 h-4" />
+							{session.data.user?.email}
+						</DropdownMenuLabel>
+						<DropdownMenuSeparator />
+						<DropdownMenuGroup>
+							<DropdownMenuLabel>My Actions</DropdownMenuLabel>
+							{userMenu.map((item) => (
+								<Link href={item.href} key={item.id}>
+									<DropdownMenuItem className={"cursor-pointer"}>
+										<item.icon size={"16"} className="mr-2" />
+										<span className="text-sm">{item.label}</span>
+									</DropdownMenuItem>
+								</Link>
+							))}
+						</DropdownMenuGroup>
+						<DropdownMenuSeparator />
+						<DropdownMenuGroup>
+							<DropdownMenuLabel>My Airbnbs</DropdownMenuLabel>
+							<Link href={"/your-home"}>
+								<DropdownMenuItem className={"cursor-pointer"}>
+									<TbHomeDollar size={"16"} className="mr-2" />
+									<span className="text-sm">Airbnb my home</span>
+								</DropdownMenuItem>
+							</Link>
+						</DropdownMenuGroup>
+					</>
 				) : (
 					<DropdownMenuLabel>Accounting</DropdownMenuLabel>
 				)}

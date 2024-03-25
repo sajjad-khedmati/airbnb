@@ -20,6 +20,7 @@ import { signIn } from "@/auth";
 import { login } from "@/actions/auth";
 import { toast } from "sonner";
 import { useTransition } from "react";
+import Link from "next/link";
 
 export default function LoginForm() {
 	const form = useForm<z.infer<typeof loginSchema>>({
@@ -95,6 +96,16 @@ export default function LoginForm() {
 				<Button disabled={isPending} type="submit" className="w-full">
 					Login
 				</Button>
+
+				<div className="flex items-center gap-2">
+					<p className="text-muted-foreground text-sm">Dont have an account?</p>
+					<Link
+						href={"/register"}
+						className="text-rose-500 text-sm font-semibold hover:underline underline-offset-4 transition"
+					>
+						join to airbnb
+					</Link>
+				</div>
 			</form>
 		</Form>
 	);
