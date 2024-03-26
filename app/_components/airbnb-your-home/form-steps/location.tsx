@@ -1,7 +1,7 @@
 "use client";
 import CountrySelect, {
 	type CountrySelectValue,
-} from "@/components/country-select";
+} from "@/components/inputs/country-select";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
 

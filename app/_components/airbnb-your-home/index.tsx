@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -12,6 +12,8 @@ import {
 import Category from "./form-steps/category";
 import { FieldValues, useForm } from "react-hook-form";
 import Location from "./form-steps/location";
+import Info from "./form-steps/info";
+import ImageUpload from "./form-steps/image-upload";
 
 enum STEPS {
 	CATEGORY = 0,
@@ -22,7 +24,7 @@ enum STEPS {
 	PRICE = 5,
 }
 
-export default function AirbnbYourHome() {
+function AirbnbYourHome() {
 	const [step, setStep] = useState(STEPS.CATEGORY);
 
 	const onBack = () => {
@@ -74,6 +76,7 @@ export default function AirbnbYourHome() {
 
 	const category = watch("category");
 	const location = watch("location");
+	const imageSrc = watch("imageSrc");
 
 	// apply changes for setValue methods - customize it!
 	const customSetValue = (id: string, value: any) => {
@@ -83,15 +86,18 @@ export default function AirbnbYourHome() {
 			shouldTouch: true,
 		});
 	};
-
 	return (
-		<Dialog>
+		<Dialog modal={false}>
 			<DialogTrigger asChild>
 				<Button variant={"outline"} size={"sm"} className="hidden md:block">
 					Airbnb your home
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="sm:max-w-[550px] max-h-screen flex flex-col justify-between">
+
+			<DialogContent
+				onInteractOutside={(e) => e.preventDefault()}
+				className="sm:max-w-[550px] max-h-screen flex flex-col justify-between"
+			>
 				<DialogHeader>
 					<DialogTitle className="font-bold text-xl text-rose-500 text-center">
 						Airbnb your home
@@ -109,6 +115,17 @@ export default function AirbnbYourHome() {
 					<Location
 						location={location}
 						onChange={(value) => customSetValue("location", value)}
+					/>
+				)}
+
+				{step === STEPS.INFO && (
+					<Info watch={watch} customSetValue={customSetValue} />
+				)}
+
+				{step === STEPS.IMAGES && (
+					<ImageUpload
+						value={imageSrc}
+						onChange={(value) => customSetValue("imageSrc", value)}
 					/>
 				)}
 
@@ -137,3 +154,5 @@ export default function AirbnbYourHome() {
 		</Dialog>
 	);
 }
+
+export default React.memo(AirbnbYourHome);
