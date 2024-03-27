@@ -1,5 +1,8 @@
 "use client";
 import React, { useMemo, useState } from "react";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -10,10 +13,12 @@ import {
 	DialogFooter,
 } from "@/components/ui/dialog";
 import Category from "./form-steps/category";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Location from "./form-steps/location";
 import Info from "./form-steps/info";
 import ImageUpload from "./form-steps/image-upload";
+import Description from "./form-steps/description";
+import Price from "./form-steps/price";
 
 enum STEPS {
 	CATEGORY = 0,
@@ -23,6 +28,18 @@ enum STEPS {
 	DESCRIPTION = 4,
 	PRICE = 5,
 }
+
+const schema = z.object({
+	category: z.string().min(1, { message: "required" }),
+	location: z.object({}),
+	guestCount: z.number(),
+	roomCount: z.number(),
+	bathroomCount: z.number(),
+	imageSrc: z.string().min(1, { message: "required" }),
+	price: z.number(),
+	title: z.string().min(1, { message: "required" }),
+	description: z.string().min(1, { message: "required" }),
+});
 
 function AirbnbYourHome() {
 	const [step, setStep] = useState(STEPS.CATEGORY);
@@ -61,6 +78,7 @@ function AirbnbYourHome() {
 		formState: { errors },
 		reset,
 	} = useForm<FieldValues>({
+		resolver: zodResolver(schema),
 		defaultValues: {
 			category: "",
 			location: null,
@@ -86,6 +104,10 @@ function AirbnbYourHome() {
 			shouldTouch: true,
 		});
 	};
+	const onSubmit: SubmitHandler<FieldValues> = (data) => {
+		console.log("SUBMITING...", data, errors);
+	};
+
 	return (
 		<Dialog modal={false}>
 			<DialogTrigger asChild>
@@ -104,6 +126,7 @@ function AirbnbYourHome() {
 					</DialogTitle>
 					<hr />
 				</DialogHeader>
+
 				{step === STEPS.CATEGORY && (
 					<Category
 						category={category}
@@ -129,6 +152,9 @@ function AirbnbYourHome() {
 					/>
 				)}
 
+				{step === STEPS.DESCRIPTION && <Description register={register} />}
+				{step === STEPS.PRICE && <Price register={register} />}
+
 				<DialogFooter>
 					{secondaryActionLabel && (
 						<Button
@@ -140,12 +166,13 @@ function AirbnbYourHome() {
 							{secondaryActionLabel}
 						</Button>
 					)}
-					{step === STEPS.PRICE ? (
-						<Button type="submit" className="w-32">
+
+					{step !== STEPS.PRICE ? (
+						<Button className="w-32" type="button" onClick={onNext}>
 							{actionLabel}
 						</Button>
 					) : (
-						<Button type="button" className="w-32" onClick={onNext}>
+						<Button className="w-32" onClick={handleSubmit(onSubmit)}>
 							{actionLabel}
 						</Button>
 					)}
