@@ -21,6 +21,12 @@ import Description from "./form-steps/description";
 import Price from "./form-steps/price";
 import Preview from "./form-steps/preview";
 import { Progress } from "@/components/ui/progress";
+import { listingSchema } from "@/schemas/listing.schema";
+import { createListing } from "@/actions/listing";
+
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { Ban, CheckCheck, Loader2 } from "lucide-react";
 
 export enum STEPS {
 	CATEGORY = 0,
@@ -32,19 +38,8 @@ export enum STEPS {
 	PREVIEW = 6,
 }
 
-const schema = z.object({
-	category: z.string().min(1, { message: "required" }),
-	location: z.object({}),
-	guestCount: z.number(),
-	roomCount: z.number(),
-	bathroomCount: z.number(),
-	imageSrc: z.string().min(1, { message: "required" }),
-	price: z.number(),
-	title: z.string().min(1, { message: "required" }),
-	description: z.string().min(1, { message: "required" }),
-});
-
 function AirbnbYourHome() {
+	const router = useRouter();
 	const [step, setStep] = useState(STEPS.CATEGORY);
 	const progress = Math.floor((step / 6) * 100);
 	// form state - managed with react-hook-form
@@ -57,7 +52,7 @@ function AirbnbYourHome() {
 		formState: { errors, isSubmitting, isDirty, isValid },
 		reset,
 	} = useForm<FieldValues>({
-		resolver: zodResolver(schema),
+		resolver: zodResolver(listingSchema),
 		defaultValues: {
 			category: "",
 			location: null,
@@ -79,13 +74,30 @@ function AirbnbYourHome() {
 			shouldTouch: true,
 		});
 	};
-	const onSubmit: SubmitHandler<FieldValues> = (data) => {
-		if (step === STEPS.PRICE) {
-			console.log("go to Preview ...");
-			return;
-		}
+	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+		if (step === STEPS.PRICE) return;
 
-		console.log("SUBMITING...", data, errors);
+		try {
+			const result = await createListing(data);
+			console.log("Result:", result);
+
+			toast("your airbnb's successfully added!", {
+				description: "you can see your airbnb's on the list of airbnb's",
+				icon: <CheckCheck className="mr-2" />,
+			});
+
+			reset();
+			setStep(STEPS.CATEGORY);
+			router.refresh();
+		} catch (error) {
+			if (error instanceof Error) {
+				toast(error?.message, {
+					description:
+						"An error accurded when try to register your airbnb's, please try again",
+					icon: <Ban className="mr-2" />,
+				});
+			}
+		}
 	};
 
 	const onBack = () => {
@@ -196,10 +208,13 @@ function AirbnbYourHome() {
 						</Button>
 					) : (
 						<Button
-							disabled={!isValid}
+							disabled={Object.keys(errors).length > 0 || isSubmitting}
 							className="w-32"
 							onClick={handleSubmit(onSubmit)}
 						>
+							{isSubmitting && (
+								<Loader2 className="w-4 h-4 animate-spin transition mr-1" />
+							)}
 							{actionLabel}
 						</Button>
 					)}

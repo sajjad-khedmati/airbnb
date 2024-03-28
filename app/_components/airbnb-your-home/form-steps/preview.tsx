@@ -27,6 +27,8 @@ const Preview: React.FC<PreviewProps> = ({ watch, errors, setStep }) => {
 	const title = watch("title");
 	const description = watch("description");
 
+	console.log(errors);
+
 	const categoryData:
 		| { label: string; icon: string; description: string }
 		| undefined =

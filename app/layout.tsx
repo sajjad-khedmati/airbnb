@@ -28,7 +28,6 @@ export default async function RootLayout({
 			<SessionProvider session={session}>
 				<body className={cn("font-nunito antialiased", nunito.variable)}>
 					<Navbar />
-					<div id="test"></div>
 					{auth}
 					{children}
 					<Toaster />

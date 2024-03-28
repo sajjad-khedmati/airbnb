@@ -6,7 +6,7 @@ import Categories from "../categories";
 
 const Navbar = () => {
 	return (
-		<header className="sticky top-0 left-0 w-screen ">
+		<header>
 			<Container>
 				<nav className="w-full flex flex-row gap-3 py-4 shadow-sm border-b-[1px] md:gap-0 items-center justify-between">
 					<Logo />
