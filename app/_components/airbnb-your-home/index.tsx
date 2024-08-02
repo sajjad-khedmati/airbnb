@@ -79,8 +79,6 @@ function AirbnbYourHome() {
 
 		try {
 			const result = await createListing(data);
-			console.log("Result:", result);
-
 			toast("your airbnb's successfully added!", {
 				description: "you can see your airbnb's on the list of airbnb's",
 				icon: <CheckCheck className="mr-2" />,

@@ -42,16 +42,6 @@ export default function UserMenu() {
 								</Link>
 							))}
 						</DropdownMenuGroup>
-						<DropdownMenuSeparator />
-						<DropdownMenuGroup>
-							<DropdownMenuLabel>My Airbnbs</DropdownMenuLabel>
-							<Link href={"/your-home"}>
-								<DropdownMenuItem className={"cursor-pointer"}>
-									<TbHomeDollar size={"16"} className="mr-2" />
-									<span className="text-sm">Airbnb my home</span>
-								</DropdownMenuItem>
-							</Link>
-						</DropdownMenuGroup>
 					</>
 				) : (
 					<DropdownMenuLabel>Accounting</DropdownMenuLabel>

@@ -70,6 +70,40 @@ export async function getListing() {
 	}
 }
 
+export async function getListingById(listingId: string) {
+	try {
+		const listingData = await prisma.listing.findUnique({
+			where: {
+				id: listingId,
+			},
+			include: {
+				user: true,
+			},
+		});
+
+		if (listingData)
+			return {
+				...listingData,
+				createdAt: listingData.createdAt.toISOString(),
+				user: {
+					...listingData.user,
+					createdAt: listingData.user.createdAt.toISOString(),
+					updatedAt: listingData.user.updatedAt.toISOString(),
+					emailVerified: listingData.user.emailVerified?.toISOString() || null,
+				},
+			};
+		throw new Error("Listing item was not found");
+	} catch (error) {
+		if (error instanceof Error) {
+			throw new Error(error.message);
+		}
+
+		throw new Error(
+			"an error accurded when try to get listing data , please try again!",
+		);
+	}
+}
+
 export async function addToFavorite(
 	listingId: string,
 	currentUser?: SafeUser | null,
